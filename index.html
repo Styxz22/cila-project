@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CILA&CILO</title>
+  <link rel="stylesheet" href="Style3.css" />
+</head>
+<body>
+  <!-- Background Floating Heart -->
+  <canvas id="heartCanvas"></canvas>
+
+  <!-- Envelope -->
+  <div class="envelope">
+    <div class="back"></div>
+    <div class="letter">
+      <div class="heart"></div>
+      <div class="text">
+        <p>
+          I want to say <br />
+          many thinks but, <br />
+          i can't express so i made <br />
+          this for you DEDE CILA
+        </p>
+        <a href="new.html">PENCET INI SAYANG</a>
+      </div>
+    </div>
+    <div class="front"></div>
+    <div class="top"></div>
+    <div class="shadow"></div>
+    <div class="text1">
+      <h2>HAII SAYANGG AKU PUNYAAA SESUATU UNTUK KAMUUU</h2>
+    </div>
+  </div>
+
+  <!-- Floating Hearts Script -->
+  <script>
+    const canvas = document.getElementById("heartCanvas");
+    const ctx = canvas.getContext("2d");
+    let hearts = [];
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function createHeart(x, y, size) {
+      ctx.beginPath();
+      const topCurveHeight = size * 0.3;
+      ctx.moveTo(x, y + topCurveHeight);
+      ctx.bezierCurveTo(
+        x, y,
+        x - size / 2, y,
+        x - size / 2, y + topCurveHeight
+      );
+      ctx.bezierCurveTo(
+        x - size / 2, y + (size + topCurveHeight) / 2,
+        x, y + (size + topCurveHeight) / 2,
+        x, y + size
+      );
+      ctx.bezierCurveTo(
+        x, y + (size + topCurveHeight) / 2,
+        x + size / 2, y + (size + topCurveHeight) / 2,
+        x + size / 2, y + topCurveHeight
+      );
+      ctx.bezierCurveTo(
+        x + size / 2, y,
+        x, y,
+        x, y + topCurveHeight
+      );
+      ctx.closePath();
+      ctx.fillStyle = "rgba(255,0,100,0.7)";
+      ctx.fill();
+    }
+
+    function addHeart() {
+      hearts.push({
+        x: random(0, canvas.width),
+        y: canvas.height + 20,
+        size: random(10, 30),
+        speed: random(0.5, 2),
+        drift: random(-0.5, 0.5)
+      });
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < hearts.length; i++) {
+        const h = hearts[i];
+        createHeart(h.x, h.y, h.size);
+        h.y -= h.speed;
+        h.x += h.drift;
+        if (h.y < -30) {
+          hearts.splice(i, 1);
+          i--;
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    setInterval(addHeart, 300);
+    animate();
+  </script>
+</body>
+</html>
